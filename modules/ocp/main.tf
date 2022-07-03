@@ -8,8 +8,8 @@ locals {
   ocp_image    = var.ocp_package.ocp
   metadb_image = var.ocp_package.metadb
   connect_type = "ssh"
-  sudo_user = var.ocp_instance.ssh_user
-  root_user = "root"
+  sudo_user    = var.ocp_instance.ssh_user
+  root_user    = "root"
 }
 
 data "aws_ec2_instance_type" "ocp_instance_type" {
@@ -81,7 +81,7 @@ resource "null_resource" "init_ocp_image" {
   # }
 
   provisioner "file" {
-    source      = "../patch_for_aws/"
+    source      = "${path.module}/../patch_for_aws/"
     destination = "./oceanbase/"
   }
 
@@ -111,9 +111,9 @@ resource "null_resource" "init_ocp_instance" {
       "sudo /bin/cp -rf ./oceanbase/* t-oceanbase-antman/",
       "/bin/bash ./t-oceanbase-antman/init_parted.sh -r ocp",
       "cd ./t-oceanbase-antman/clonescripts",
-      "./clone.sh -u",
-      "./clone.sh -m -r ocp",
-      "./clone.sh -i",
+      "./clone.sh -u > /dev/null",
+      "./clone.sh -m -r ocp > /dev/null",
+      "./clone.sh -i ",
       "./clone.sh -c -r ocp",
       "echo -e 'maxslewrate 500\nallow ${var.oceanbase_vpc.cidr_block}\nlocal stratum 10' >> /etc/chrony.conf",
       "systemctl restart chronyd"

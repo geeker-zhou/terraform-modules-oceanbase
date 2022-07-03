@@ -17,11 +17,11 @@ variable "oceanbase_vpc" {
 
 variable "ocp_instance" {
   type = object({
-    instance_type   = string
-    public_ip  = string
-    private_ip = string
-    ssh_user        = string
-    ssh_credential  = string
+    instance_type  = string
+    public_ip      = string
+    private_ip     = string
+    ssh_user       = string
+    ssh_credential = string
   })
   nullable = false
 }
