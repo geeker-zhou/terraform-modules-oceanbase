@@ -55,6 +55,18 @@ resource "tls_private_key" "private_key" {
   rsa_bits  = 4096
 }
 
+resource "local_file" "openssh_key" {
+  content         = tls_private_key.private_key.private_key_openssh
+  filename        = "${path.module}/id_openssh"
+  file_permission = "0600"
+}
+
+resource "local_file" "pem_key" {
+  content         = tls_private_key.private_key.private_key_pem
+  filename        = "${path.module}/id_pem"
+  file_permission = "0600"
+}
+
 # KeyPair for deploy OB
 resource "aws_key_pair" "oceanbase_deployer" {
   key_name   = "ob-deployer-keypair"
@@ -110,7 +122,6 @@ resource "aws_iam_instance_profile" "s3_access_profile" {
   name = "s3_access_profile"
   role = aws_iam_role.ec2_access_s3.name
 }
-
 
 resource "aws_instance" "instance" {
   ami                  = data.aws_ami.amazon.id
